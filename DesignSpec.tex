@@ -1,0 +1,260 @@
+\documentclass[12pt]{article}
+\usepackage[margin=1in]{geometry}
+
+\title{Design Specification\\FlightSound}
+\author{Group 05}
+\date{May 11, 2026}
+
+\begin{document}
+
+\maketitle
+\newpage
+
+\tableofcontents
+\newpage
+
+\section*{Version History}
+\addcontentsline{toc}{section}{Version History}
+
+\begin{tabular}{|l|l|l|l|}
+\hline
+Version & Date & Author & Description \\
+\hline
+1.0 & May 11, 2026 & Group 06 & Initial Draft \\
+\hline
+\end{tabular}
+
+\newpage
+
+\section{Page and Component Breakdown}
+
+This section describes every page, panel, and tool that makes up the FlightSound application.
+
+\subsection{Main Map Page}
+The main map page is the primary screen of the application. It loads on startup and serves as the central interface for all user interactions.
+
+\begin{itemize}
+\item Displays a full-screen interactive map rendered by the Google Maps JavaScript API.
+\item Defaults to LAX as the starting airport when the page first loads.
+\item Shows aircraft markers as icons positioned at their current coordinates on the map.
+\item Shows color-coded noise circles around each aircraft: green for low noise, yellow for medium, and red for high.
+\item Contains the navigation bar, search bar, and all toggle controls.
+\item Sends HTTP requests to the Java backend at port 8080 to retrieve flight and weather data.
+\end{itemize}
+
+\subsection{Airport Selection}
+The airport selection tool is embedded in the navigation bar at the top of the main page.
+
+\begin{itemize}
+\item Allows users to type an airport name or IATA code into a search input.
+\item Sends the selected airport code to the backend API to fetch nearby flight data.
+\item Recenters the map on the selected airport after a selection is made.
+\item Validates the input to only accept known IATA airport codes.
+\end{itemize}
+
+\subsection{Aircraft Markers}
+Aircraft markers are rendered on the map for each active flight returned by the backend.
+
+\begin{itemize}
+\item Each marker is positioned at the flight's current latitude and longitude.
+\item Clicking a marker opens the aircraft details side panel.
+\item Markers are accompanied by noise zone circles that visually represent the estimated noise impact area.
+\item Marker positions are updated when new flight data is fetched.
+\end{itemize}
+
+\subsection{Aircraft Details Side Panel}
+The side panel appears when a user clicks on an aircraft marker or a row in the results table.
+
+\begin{itemize}
+\item Displays the flight number, airline name, aircraft type, altitude, and speed.
+\item Shows the estimated noise level in decibels and a descriptive label such as Whisper, Conversation, or Jet Engine.
+\item Shows the departure and arrival airport codes.
+\item Displays the noise zone classification: low, medium, or high.
+\end{itemize}
+
+\subsection{Noise Heatmap and Zone Circles}
+The noise visualization tools allow users to see estimated noise impact areas on the map.
+
+\begin{itemize}
+\item Color-coded circles are drawn around each aircraft marker representing the estimated noise impact zone.
+\item Low noise zones are shown in green, medium in yellow, and high in red.
+\item The circles can be toggled on or off using a control button on the map.
+\item Noise levels are calculated by the backend using a 3D slant-distance model combining horizontal distance and altitude.
+\end{itemize}
+
+\subsection{Weather Panel}
+The weather panel displays current conditions for the selected airport.
+
+\begin{itemize}
+\item Retrieves weather data from the Open-Meteo API via the backend weather endpoint.
+\item Displays temperature, wind speed, wind direction, humidity, and general weather condition.
+\item Weather data is fetched using the airport's latitude and longitude coordinates.
+\item Displayed in the side panel below aircraft details or as a standalone view.
+\end{itemize}
+
+\subsection{Google Sign-In and Authentication}
+FlightSound includes a Google OAuth sign-in system managed by the AuthManager module in the frontend.
+
+\begin{itemize}
+\item Users can sign in using their Google account via the Google Identity Services API.
+\item On sign-in, the frontend decodes the Google JWT token to extract the user's Google ID, email, and display name.
+\item The user's session is stored in the browser's localStorage under the key fs\_user.
+\item On first sign-in, a new user record is created in the SQLite database via the backend auth endpoint.
+\item Returning users are looked up by their Google ID and their session is restored.
+\end{itemize}
+
+\subsection{User Preferences}
+The preferences panel allows signed-in users to save personal settings.
+
+\begin{itemize}
+\item Users can save a preferred airport so the map defaults to that location on load.
+\item Users can save a preferred address which is geocoded and used as their noise reference point.
+\item Preferences are stored in the SQLite database and retrieved on sign-in via the preferences endpoint.
+\item The noise calculation mode switches between airport-based, user-location-based, and address-based depending on the user's preference.
+\end{itemize}
+
+\subsection{Help Page}
+The Help page is accessible from the navigation bar.
+
+\begin{itemize}
+\item Explains how noise levels are estimated and what each color zone means.
+\item Describes how to use the airport search and map controls.
+\item Includes a brief FAQ section covering common questions about the data and its limitations.
+\item Clarifies that noise estimates are approximations and not certified acoustic measurements.
+\end{itemize}
+
+\subsection{Backend API Endpoints}
+The Java backend runs on port 8080 and exposes the following HTTP endpoints:
+
+\begin{tabular}{|l|l|p{6cm}|}
+\hline
+Endpoint & Method & Description \\
+\hline
+/api/noise?airport=\{iata\} & GET & Returns flight data and estimated noise levels for the given airport. \\
+\hline
+/api/weather?airport=\{iata\} & GET & Returns current weather for the given airport using Open-Meteo. \\
+\hline
+/api/weather?lat=\{lat\}\&lng=\{lng\} & GET & Returns weather for arbitrary coordinates. \\
+\hline
+/api/auth & POST & Handles Google Sign-In, creates or retrieves a user record. \\
+\hline
+/api/users & GET/PUT & Retrieves or updates user account information. \\
+\hline
+/api/user/preferences & GET/PUT & Retrieves or updates saved preferences for a signed-in user. \\
+\hline
+\end{tabular}
+
+\subsection{SQLite Database}
+FlightSound uses a local SQLite database file (users.db) to store user account and preferences data.
+
+\begin{tabular}{|l|p{4cm}|p{6cm}|}
+\hline
+Table & Key Fields & Description \\
+\hline
+users & google\_id (PK), email, username, created\_at & Stores registered user accounts linked to Google Sign-In. \\
+\hline
+preferences & google\_id (FK), preferred\_airport, preferred\_address, address\_lat, address\_lng & Stores saved user preferences for airport and noise reference location. \\
+\hline
+\end{tabular}
+
+\newpage
+
+\section{Docker Dependencies}
+
+This section lists all packages, libraries, and dependencies required to run FlightSound inside a Docker container.
+
+\subsection{Backend Container}
+
+The backend runs as a Java application. The following are required:
+
+\begin{tabular}{|l|l|p{6cm}|}
+\hline
+Dependency & Version & Purpose \\
+\hline
+Java JDK & 17 or higher & Runtime and compilation environment for the Java backend. \\
+\hline
+Google Gson & 2.10.1 & JSON serialization and deserialization for API responses and request parsing. \\
+\hline
+sqlite-jdbc & 3.45.1.0 & JDBC driver that allows the Java backend to connect to and query the SQLite database file. \\
+\hline
+com.sun.net.httpserver & Built into JDK & Lightweight HTTP server used to expose the backend API endpoints. No additional download required. \\
+\hline
+java.net.http.HttpClient & Built into JDK 11+ & Used to send HTTP requests to the AirLabs API and Open-Meteo API. No additional download required. \\
+\hline
+\end{tabular}
+
+Environment variables that must be set in the container:
+
+\begin{tabular}{|l|p{9cm}|}
+\hline
+Variable & Description \\
+\hline
+FLIGHTLABS\_API\_KEY & API key for the AirLabs real-time flight data API. \\
+\hline
+GOOGLE\_MAPS\_API\_KEY & API key for the Google Maps JavaScript API used by the frontend. \\
+\hline
+\end{tabular}
+
+\subsection{Frontend Container}
+
+The frontend is a set of static files (HTML, CSS, JavaScript) that require a web server to be served. No build step or package manager is needed.
+
+\begin{tabular}{|l|l|p{6cm}|}
+\hline
+Dependency & Version & Purpose \\
+\hline
+Nginx & Latest stable & Serves the static frontend files (HTML, CSS, JS) to the browser. \\
+\hline
+Bootstrap & 5.x (CDN) & Loaded via CDN link in the HTML. No local installation required inside the container. \\
+\hline
+Google Maps JavaScript API & Latest (CDN) & Loaded via script tag using the API key. No local installation required. \\
+\hline
+Google Identity Services & Latest (CDN) & Loaded via script tag for Google Sign-In. No local installation required. \\
+\hline
+\end{tabular}
+
+\subsection{External APIs (No Docker Installation Required)}
+The following services are called over HTTPS at runtime and do not need to be installed in the container:
+
+\begin{tabular}{|l|p{10cm}|}
+\hline
+Service & Description \\
+\hline
+AirLabs API & Provides real-time flight data. Requires FLIGHTLABS\_API\_KEY environment variable. \\
+\hline
+Open-Meteo API & Provides current weather data by coordinates. No API key required. \\
+\hline
+Google Maps JavaScript API & Renders the interactive map. Requires GOOGLE\_MAPS\_API\_KEY. \\
+\hline
+Google Identity Services & Handles Google OAuth sign-in. Requires a configured Google OAuth client ID. \\
+\hline
+\end{tabular}
+
+\newpage
+
+\section{Glossary}
+
+\begin{tabular}{|l|l|}
+\hline
+Acronym & Definition \\
+\hline
+API & Application Programming Interface \\
+CDN & Content Delivery Network \\
+CSS & Cascading Style Sheets \\
+dB & Decibel \\
+HTML & HyperText Markup Language \\
+HTTP & HyperText Transfer Protocol \\
+HTTPS & HyperText Transfer Protocol Secure \\
+IATA & International Air Transport Association \\
+JDBC & Java Database Connectivity \\
+JDK & Java Development Kit \\
+JSON & JavaScript Object Notation \\
+JWT & JSON Web Token \\
+OAuth & Open Authorization \\
+SQLite & Self-Contained Lightweight SQL Database Engine \\
+UI & User Interface \\
+URL & Uniform Resource Locator \\
+\hline
+\end{tabular}
+
+\end{document}
