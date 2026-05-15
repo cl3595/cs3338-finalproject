@@ -1,0 +1,149 @@
+\documentclass[12pt]{article}
+\usepackage[margin=1in]{geometry}
+
+\title{Software Requirements Specification\\FlightSound}
+\author{Group 05}
+\date{May 10, 2026}
+
+\begin{document}
+
+\maketitle
+\newpage
+
+\tableofcontents
+\newpage
+
+\section*{Version History}
+\addcontentsline{toc}{section}{Version History}
+
+\begin{tabular}{|l|l|l|l|}
+\hline
+Version & Date & Author & Description \\
+\hline
+1.0 & February 15, 2026 & Whole Group & Initial Draft \\
+
+\hline
+\end{tabular}
+
+\newpage
+
+\section{Introduction}
+
+\subsection{Purpose}
+This Software Requirements Specification (SRS) describes the requirements for FlightSound, a web application that displays a map of current air traffic and estimates how loud nearby aircraft are based on their altitude and aircraft type. This document explains what the software should do and will serve as a guide for the development team throughout the project.
+
+\subsection{Intended Audience}
+\begin{itemize}
+\item Developers -- Should read the entire document to understand all requirements before building the application.
+\item Testers -- Should focus on the external interface requirements section, which describes how the application interacts with users and outside systems.
+\item Project Managers -- Should focus on the introduction to get an overall understanding of FlightSound and its goals.
+\item Users -- Should focus on the introduction to understand the purpose of FlightSound and how it can benefit them.
+\end{itemize}
+
+\subsection{Overview}
+This document is organized as follows. Section 2 describes the external interface requirements, covering both the user interface and software interfaces. Section 3 addresses legal and ethical considerations relevant to the system. Section 4 provides a glossary of acronyms used throughout this document.
+
+\newpage
+
+\section{External Interface Requirements}
+
+\subsection{User Interface}
+The FlightSound user interface is a single-page web application with an interactive map as its primary feature. The following requirements apply:
+
+\begin{itemize}
+\item The application must be accessible through a standard web browser without requiring any additional installation.
+\item The interface must include an interactive map display, a top navigation bar, and side panels for aircraft and weather information.
+\item Users must be able to select an airport for monitoring, view real-time aircraft positions on the map, click aircraft markers to view details, view estimated noise levels, and view current weather conditions for the selected airport.
+\item All pages must include the project name, a Help button, and a Settings button.
+\item Error messages must clearly describe the issue and provide instructions to correct it. Critical errors must be highlighted in red.
+\item Loading states must be shown with a map spinner and a status message indicating that live traffic is updating.
+\item The interface must use the Bootstrap 5 framework and a consistent font such as Arial or Roboto.
+\item The interface must be usable on desktop, laptop, tablet, and mobile screen sizes.
+\end{itemize}
+
+\subsection{Software Interfaces}
+The system interacts with the following external software components:
+
+\begin{tabular}{|l|l|p{6.5cm}|}
+\hline
+Component & Version & Description \\
+\hline
+FlightLabs API & Latest & Provides real-time flight data including aircraft position, altitude, speed, and aircraft type. \\
+\hline
+Google Maps JavaScript API & Latest & Renders the interactive map, aircraft markers, and noise heatmap overlays. \\
+\hline
+Open-Meteo API & Latest & Provides weather conditions for selected airports using latitude and longitude coordinates. \\
+\hline
+MySQL Database & 8.x & Stores all persistent application data including flight, weather, and noise records. \\
+\hline
+Bootstrap & 5.x & Frontend framework used for layout and responsive design. \\
+\hline
+Git & 2.53.0 & Used to track changes made to the codebase. \\
+\hline
+Bruno API Client & 3.1.3 & Used during development to manually test API endpoints. \\
+\hline
+GitHub & --- & Repository hosting and project management. \\
+\hline
+\end{tabular}
+
+\newpage
+
+\section{Legal and Ethical Considerations}
+
+\subsection{User Data}
+FlightSound does not require users to create accounts or submit personal information to use the application. The system logs basic query activity such as airport selections for potential analytics. The following apply:
+
+\begin{itemize}
+\item User data should only be collected when necessary for the operation of the system.
+\item Users should not be required to provide personal information to access core features.
+\item Location data accessed through the browser, if the user opts in, should only be used to center the map and should not be stored or passed to external services.
+\item The system should not share any collected usage data with third parties.
+\end{itemize}
+
+\subsection{Storing Data}
+All data stored by the system should be handled responsibly:
+
+\begin{itemize}
+\item All communication between the browser, backend, and external APIs should use HTTPS to encrypt data in transit.
+\item API keys for FlightLabs and Google Maps must be stored in server-side environment variables and must never appear in client-side code.
+\item All SQL queries should use prepared statements to prevent SQL injection.
+\item Flight and weather data stored in the database comes from public third-party APIs and should be used in accordance with each provider's terms of service.
+\item Database credentials must not be hardcoded in source code.
+\end{itemize}
+
+\subsection{Moral Considerations}
+The development team recognizes the following responsibilities for this project:
+
+\begin{itemize}
+\item The noise estimates produced by FlightSound are based on a simplified model and are not precise measurements. The application should make this clear to users so they do not treat the values as certified acoustic data.
+\item Flight position data is used only for educational and informational purposes within the scope of this project and should not be repurposed in a way that enables surveillance or tracking of individuals.
+\item The application should be straightforward and honest in how it presents data to users, avoiding misleading visualizations or exaggerated noise estimates.
+\end{itemize}
+
+\newpage
+
+\section{Glossary}
+
+\begin{tabular}{|l|l|}
+\hline
+Acronym & Definition \\
+\hline
+API & Application Programming Interface \\
+CSS & Cascading Style Sheets \\
+dB & Decibel \\
+FAQ & Frequently Asked Questions \\
+HTML & HyperText Markup Language \\
+HTTP & HyperText Transfer Protocol \\
+HTTPS & HyperText Transfer Protocol Secure \\
+IATA & International Air Transport Association \\
+JSON & JavaScript Object Notation \\
+MySQL & My Structured Query Language \\
+SRS & Software Requirements Specification \\
+SQL & Structured Query Language \\
+TLS & Transport Layer Security \\
+UI & User Interface \\
+URL & Uniform Resource Locator \\
+\hline
+\end{tabular}
+
+\end{document}
