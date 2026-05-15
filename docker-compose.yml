@@ -1,0 +1,38 @@
+version: "3.9"
+services:
+  # Frontend
+  # Image: nginx:stable
+  # Serves the FlightSound web UI as static files via Nginx
+  #
+  # What the UI shows:
+  #   - Navigation bar: Home, Preferences, About, Contact, Sign in with Google
+  #   - Aircraft Noise Monitor heading with airport search bar
+  #   - Google Maps with green aircraft markers and noise zone circles
+  #   - Noise level legend: Low = Peaceful, Medium = Noticeable, High = Loud
+  #   - Nearby Flights side panel
+  #   - Weather panel showing real-time weather data
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    container_name: flightsound-frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+
+  # Backend
+  # Image: eclipse-temurin:17-jdk
+  # Java server running on port 8080
+  # Handles all API requests, noise calculations, weather, and user auth
+  
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    container_name: flightsound-backend
+    ports:
+      - "8080:8080"
+    environment:
+      - FLIGHTLABS_API_KEY=${FLIGHTLABS_API_KEY}
+      - GOOGLE_MAPS_API_KEY=${GOOGLE_MAPS_API_KEY}
