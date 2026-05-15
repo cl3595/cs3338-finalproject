@@ -1,0 +1,161 @@
+\documentclass[12pt]{article}
+\usepackage[margin=1in]{geometry}
+
+\title{Software Design Document\\FlightSound}
+\author{Group 05}
+\date{May 10, 2026}
+
+\begin{document}
+
+\maketitle
+\newpage
+
+\tableofcontents
+\newpage
+
+\section*{Version History}
+\addcontentsline{toc}{section}{Version History}
+
+\begin{tabular}{|l|l|l|l|}
+\hline
+Version & Date & Author & Description \\
+\hline
+1.0 & March 10, 2026 & Whole Group & Initial SDD Draft \\
+\hline
+\end{tabular}
+
+\newpage
+
+\section{Introduction}
+
+\subsection{Purpose}
+This Software Design Document (SDD) describes the architecture and design of FlightSound, a web-based application that helps residents near airports understand expected aircraft noise levels based on real-time flight activity. It covers the system's structure, component responsibilities, data flow, database design, and user interface layout. This document serves as the primary technical reference for the development team throughout the implementation phase of the project.
+
+\subsection{Intended Audience}
+\begin{itemize}
+\item Developers -- Should read the entire document, with particular attention to the architecture, component design, and database structure sections.
+\item Testers -- Should focus on component behavior descriptions.
+\item Project Managers -- Should focus on the introduction and system overview for a high-level understanding of the system.
+\item Students Reviewing the Project -- Should read the introduction and system architecture first before diving into the details.
+\end{itemize}
+
+\subsection{Overview}
+This document is organized as follows. Section 2 describes the overall system architecture, including the workflow and a breakdown of each module. Section 3 covers the user interface, explaining how to use the system and how the database is structured. Section 4 provides a glossary of acronyms used throughout this document. Section 5 lists all references.
+
+\newpage
+
+\section{System Architecture}
+
+\subsection{Workflow}
+FlightSound follows a client-server architecture organized into four layers: the frontend, the Java backend, external APIs, and a MySQL database.
+
+\begin{enumerate}
+\item The user opens FlightSound in a web browser and is presented with an interactive Google Maps interface.
+\item The user selects an airport using the search bar, which sends a request from the frontend to the Java backend.
+\item The backend queries the FlightLabs API for real-time flights near the selected airport.
+\item The backend runs noise estimation calculations on each flight using altitude and aircraft type.
+\item The backend stores relevant flight, weather, and noise records in the MySQL database.
+\item The backend returns the processed data to the frontend as JSON.
+\item The frontend renders aircraft markers on the map and displays noise level information in the side panel.
+\item Weather data is retrieved from the Open-Meteo API and displayed alongside aircraft details.
+\end{enumerate}
+
+\subsection{Site Breakdown}
+
+\begin{tabular}{|l|p{9.5cm}|}
+\hline
+Module & Description \\
+\hline
+Frontend & HTML, CSS, and JavaScript single-page application. Renders the Google Maps interface, aircraft markers, noise heatmap overlay, and side panels. \\
+\hline
+Backend & Java server that handles all application logic. Receives frontend requests, queries external APIs, runs noise calculations, and communicates with the MySQL database. \\
+\hline
+FlightLabs API Integration & Sends HTTP requests to the FlightLabs API and parses the JSON response into Java Flight model objects. \\
+\hline
+Noise Estimation Module & Calculates estimated noise levels in decibels using a simplified formula based on aircraft type and altitude. \\
+\hline
+Weather API Integration & Retrieves weather conditions from the Open-Meteo API for the selected airport using its coordinates. \\
+\hline
+Database Access Module & Manages all MySQL communication using JDBC. Handles insert and query operations for all database tables. \\
+\hline
+Google Maps API & Third-party service used by the frontend to render the interactive map, place aircraft markers, and display noise heatmap overlays. \\
+\hline
+\end{tabular}
+
+\newpage
+
+\section{User Interface}
+
+\subsection{How to Use}
+
+\begin{enumerate}
+\item Open a web browser and navigate to the FlightSound application URL.
+\item The main screen loads a full-screen interactive Google Map centered on a default location.
+\item Type an airport name or IATA code into the search bar at the top of the page and select an airport from the dropdown.
+\item The map recenters on the selected airport and loads aircraft markers representing active nearby flights.
+\item Click any aircraft marker to open the side panel, which displays the flight number, airline, aircraft type, altitude, speed, and estimated noise level.
+\item The noise level is shown as a decibel value and a color-coded label: green for quiet, yellow for moderate, and red for loud.
+\item Toggle the noise heatmap overlay using the toolbar on the map to view color-coded noise zones across the area.
+\item Current weather conditions for the selected airport are shown below the aircraft details in the side panel.
+\end{enumerate}
+
+\subsection{Database Explanation}
+FlightSound uses a MySQL relational database to store flight, airport, weather, noise impact, and query data.
+
+\begin{tabular}{|l|p{4cm}|p{6cm}|}
+\hline
+Table & Key Fields & Description \\
+\hline
+Airport & airport\_id (PK), airport\_name, city, country, latitude, longitude & Stores information about airports available for monitoring. \\
+\hline
+Flight & flight\_id (PK), airport\_id (FK), flight\_number, airline\_name, aircraft\_type, altitude, speed, latitude, longitude, status, timestamp & Stores flight records retrieved from the FlightLabs API. \\
+\hline
+Weather & weather\_id (PK), airport\_id (FK), temperature, wind\_speed, wind\_direction, humidity, weather\_condition, timestamp & Stores weather snapshots fetched from Open-Meteo for a selected airport. \\
+\hline
+NoiseImpact & noise\_id (PK), flight\_id (FK), weather\_id (FK), estimated\_noise\_level, impact\_zone, calculation\_time & Stores calculated noise records linking a flight and weather entry to an estimated noise level. \\
+\hline
+Query & query\_id (PK), selected\_airport, query\_time, filters & Logs user airport selections and applied filters. \\
+\hline
+\end{tabular}
+
+\newpage
+
+\section{Glossary}
+
+\begin{tabular}{|l|l|}
+\hline
+Acronym & Definition \\
+\hline
+API & Application Programming Interface \\
+CSS & Cascading Style Sheets \\
+DB & Database \\
+dB & Decibel \\
+HTML & HyperText Markup Language \\
+HTTP & HyperText Transfer Protocol \\
+HTTPS & HyperText Transfer Protocol Secure \\
+IATA & International Air Transport Association \\
+JDBC & Java Database Connectivity \\
+JSON & JavaScript Object Notation \\
+MySQL & My Structured Query Language \\
+SDD & Software Design Document \\
+SRS & Software Requirements Specification \\
+STP & Software Test Plan \\
+UI & User Interface \\
+URL & Uniform Resource Locator \\
+\hline
+\end{tabular}
+
+\newpage
+
+\section{References}
+
+\begin{enumerate}
+\item AirLabs API Documentation: https://airlabs.co
+\item Google Maps JavaScript API Documentation: https://developers.google.com/maps/documentation/javascript
+\item FlightSound Software Requirements Specification (SRS), Version 1.3, May 2026
+\item FlightSound Software Test Plan (STP), May 2026
+\item Open-Meteo API Documentation: https://open-meteo.com/en/docs
+\item Bootstrap 5 Documentation: https://getbootstrap.com/docs/5.0/
+\end{enumerate}
+
+\end{document}
