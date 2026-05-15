@@ -1,0 +1,200 @@
+\documentclass[12pt]{article}
+\usepackage[margin=1in]{geometry}
+
+\title{Snapshot Objectives\\FlightSound}
+\author{Group 05}
+\date{May 15, 2026}
+
+\begin{document}
+
+\maketitle
+\newpage
+
+\tableofcontents
+\newpage
+
+\section{Snapshot 1 Objectives}
+
+Snapshot 1 focuses on project planning, initial system setup, and foundational development for FlightSound.
+
+\subsection{Project Planning}
+\begin{itemize}
+\item Finalize the project idea and overall system goals.
+\item Create the Software Requirements Specification (SRS).
+\item Create the initial Software Design Document (SDD).
+\item Set up the Jira project board for sprint planning and task management.
+\item Create the GitHub repository and establish the project workflow.
+\end{itemize}
+
+\subsection{Frontend Foundation}
+\begin{itemize}
+\item Create the main HTML, CSS, and JavaScript project structure.
+\item Integrate the Google Maps JavaScript API.
+\item Create the navigation bar and airport search interface.
+\item Display a default airport map view centered on LAX.
+\item Implement responsive page layout using Bootstrap 5.
+\end{itemize}
+
+\subsection{Backend Foundation}
+\begin{itemize}
+\item Set up the Java backend server running on port 8080.
+\item Create the initial API endpoint structure.
+\item Configure HTTP request handling using Java HttpServer.
+\item Connect to the FlightLabs API for retrieving live flight data.
+\item Create initial JSON parsing using Gson.
+\end{itemize}
+
+\subsection{Database Setup}
+\begin{itemize}
+\item Configure the SQLite database environment.
+\item Create the users and preferences database tables.
+\item Establish JDBC database connectivity.
+\end{itemize}
+
+\subsection{Docker Environment}
+\begin{itemize}
+\item Create Dockerfiles for frontend and backend containers.
+\item Configure docker-compose.yml for multi-container deployment.
+\item Verify that frontend and backend containers communicate successfully.
+\end{itemize}
+
+\newpage
+
+\section{Snapshot 2 Objectives}
+
+Snapshot 2 focuses on implementing the core functionality of FlightSound and beginning testing.
+
+\subsection{Flight Data Features}
+\begin{itemize}
+\item Display real-time aircraft markers on the map.
+\item Fetch nearby flight data based on airport selection.
+\item Update aircraft positions dynamically from API responses.
+\item Display aircraft information inside the side panel.
+\end{itemize}
+
+\subsection{Noise Visualization}
+\begin{itemize}
+\item Implement noise estimation calculations using altitude and aircraft type.
+\item Create color-coded noise circles for aircraft markers.
+\item Add a noise legend explaining low, medium, and high noise zones.
+\item Implement noise overlay toggle controls.
+\end{itemize}
+
+\subsection{Weather Integration}
+\begin{itemize}
+\item Connect the backend to the Open-Meteo API.
+\item Display temperature, wind speed, humidity, and weather conditions.
+\item Link airport coordinates to weather requests.
+\end{itemize}
+
+\subsection{Authentication}
+\begin{itemize}
+\item Implement Google OAuth sign-in using Google Identity Services.
+\item Create backend authentication endpoints.
+\item Store authenticated user information in the SQLite database.
+\item Maintain user session data using browser localStorage.
+\end{itemize}
+
+\subsection{Testing}
+\begin{itemize}
+\item Begin backend API endpoint testing.
+\item Test frontend map rendering and marker updates.
+\item Create Snapshot 2 TestRail reports.
+\item Fix major bugs identified during testing.
+\end{itemize}
+
+\newpage
+
+\section{Snapshot 3 Objectives}
+
+Snapshot 3 focuses on feature completion, user preferences, integration testing, and UI improvements.
+
+\subsection{User Preferences}
+\begin{itemize}
+\item Allow users to save a preferred airport.
+\item Allow users to save a preferred address.
+\item Implement geocoding for saved addresses.
+\item Retrieve saved preferences on sign-in.
+\item Add support for multiple noise calculation modes.
+\end{itemize}
+
+\subsection{User Interface Improvements}
+\begin{itemize}
+\item Improve the visual design of the map and side panels.
+\item Improve responsive behavior for mobile and tablet devices.
+\item Add loading indicators and error messages.
+\item Improve navigation and overall usability.
+\end{itemize}
+
+\subsection{Help and Documentation Features}
+\begin{itemize}
+\item Create the Help page and FAQ section.
+\item Explain aircraft noise calculations and map controls.
+\item Add user guidance for airport search and preferences.
+\end{itemize}
+
+\subsection{System Integration}
+\begin{itemize}
+\item Fully integrate frontend, backend, database, and APIs.
+\item Verify Docker container deployment works correctly.
+\item Test communication between all services.
+\item Optimize API response handling and database operations.
+\end{itemize}
+
+\subsection{Testing}
+\begin{itemize}
+\item Perform integration testing across all system components.
+\item Conduct user interface testing.
+\item Expand backend and frontend test coverage.
+\item Generate Snapshot 3 TestRail reports.
+\end{itemize}
+
+\newpage
+
+\section{Snapshot 4 Objectives}
+
+Snapshot 4 focuses on finalization, deployment readiness, documentation completion, and final testing.
+
+\subsection{Final System Improvements}
+\begin{itemize}
+\item Optimize application performance and API usage.
+\item Resolve remaining bugs and stability issues.
+\item Improve frontend responsiveness and map rendering speed.
+\item Finalize database queries and backend logic.
+\end{itemize}
+
+\subsection{Deployment and Docker}
+\begin{itemize}
+\item Finalize Docker deployment configuration.
+\item Verify production container compatibility.
+\item Configure required environment variables for deployment.
+\item Perform final deployment testing.
+\end{itemize}
+
+\subsection{Documentation}
+\begin{itemize}
+\item Finalize the SRS and SDD documents.
+\item Complete the README and user manual.
+\item Finalize the Design Specification document.
+\item Update all version history sections.
+\item Prepare the workflow diagram and architecture overview.
+\end{itemize}
+
+\subsection{Final Testing}
+\begin{itemize}
+\item Conduct full system testing and user acceptance testing.
+\item Verify all API endpoints and frontend functionality.
+\item Perform final authentication and database tests.
+\item Generate Snapshot 4 TestRail reports.
+\item Validate all project requirements have been completed.
+\end{itemize}
+
+\subsection{Project Submission}
+\begin{itemize}
+\item Prepare the final project presentation and demo.
+\item Submit all source code, Docker files, and documentation.
+\item Ensure the GitHub repository is fully updated.
+\item Verify Jira sprint completion and documentation.
+\end{itemize}
+
+\end{document}
