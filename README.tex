@@ -1,0 +1,87 @@
+\documentclass[12pt]{article}
+\usepackage[margin=1in]{geometry}
+
+\title{README\\FlightSound}
+\author{Group 05}
+\date{May 10, 2026}
+
+\begin{document}
+
+\maketitle
+\newpage
+
+\tableofcontents
+\newpage
+
+\section*{Version History}
+\addcontentsline{toc}{section}{Version History}
+
+\begin{tabular}{|l|l|l|l|}
+\hline
+Version & Date & Author & Description \\
+\hline
+1.0 & May 10, 2026 & Group 06 & Initial draft \\
+\hline
+\end{tabular}
+
+\newpage
+
+\section{Project Management}
+
+The project board for FlightSound is managed through Jira. All sprint tasks, bug reports, and team assignments can be found at the following link:
+
+https://calstatela-group5-final.atlassian.net/jira/software/projects/SCRUM/boards/1?atlOrigin=eyJpIjoiNDMxNWJlMGNjOTM1NDAwYmI0MmQ1NjQzMGU4OWE5MzYiLCJwIjoiaiJ9
+
+\newpage
+
+\section{Objective}
+
+FlightSound is a web application built as a course project for CS3338. The goal of the project is to display real-time flight activity on an interactive map and estimate how loud nearby aircraft are based on their altitude and aircraft type. The backend is written in Java and connects to a MySQL database. The frontend is built with HTML, CSS, and JavaScript using the Google Maps API to render the map.
+
+The core objectives of the project are:
+
+\begin{itemize}
+\item Retrieve live flight data from the FlightLabs API and display aircraft positions on an interactive Google Maps interface.
+\item Estimate noise levels for each aircraft using a simplified formula based on altitude and aircraft type.
+\item Display current weather conditions for the selected airport using the Open-Meteo API.
+\item Store flight, weather, and noise data in a MySQL database.
+\item Provide a simple and easy to navigate interface for users to find and interact with flight data.
+\end{itemize}
+
+\newpage
+
+\section{Goals and Purpose}
+
+\subsection{Why FlightSound Matters}
+People who live near airports often have no easy way to know when aircraft noise will be at its worst. FlightSound gives users a simple way to see which flights are nearby, how loud they are estimated to be, and what the current weather conditions are at a selected airport. The idea is that someone could open the application, select their nearest airport, and use the information to plan around noisy periods in their day.
+
+\subsection{Goals}
+\begin{itemize}
+\item Build a working full-stack web application using Java, MySQL, and external REST APIs
+\item Give the team practical experience connecting a frontend, backend, database, and multiple third-party APIs into one functioning system.
+\item Produce clean and maintainable code backed by proper documentation including this README, the SRS, and the SDD.
+\item Deliver a project that could be extended with additional features in the future such as historical noise data, user accounts, or flight path predictions.
+\end{itemize}
+
+\newpage
+
+\section{How to Access and Download}
+
+\subsection{Accessing the Application}
+FlightSound can be accessed through any modern web browser. Navigate to the hosted URL provided by the deployment environment. No installation is required to use the application.
+
+\subsection{Downloading and Running Locally}
+To run FlightSound locally, follow the steps below:
+
+\begin{enumerate}
+\item Make sure Java 17 or higher and MySQL 8.x are installed on your machine.
+\item Clone the project repository from GitHub.
+\item Navigate to the project directory in your terminal.
+\item Set up a configuration file with the required environment variables: your FlightLabs API key, Google Maps API key, and MySQL database credentials.
+\item Run the database setup to create the required tables: Airport, Flight, Weather, NoiseImpact, and Query.
+\item Compile and start the Java backend server.
+\item Open the frontend files from the frontend directory in your browser or serve them through a local web server.
+\item The application will be available at the local address provided by the server.
+\end{enumerate}
+
+\end{document}
